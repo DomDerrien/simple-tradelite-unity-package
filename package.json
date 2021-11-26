@@ -1,0 +1,27 @@
+{
+    "name": "net.tradelite.sdk.unity",
+    "version": "0.0.8",
+    "displayName": "Tradelite SDK for Unity Games",
+    "description": "This package provides utilities to connect to the Tradelite services to get tuned financial market data to report scores, to get the list of upcoming events, and to get the event leaderboards.",
+    "unity": "2020.3",
+    "unityRelease": "22f1",
+    "dependencies": {
+    },
+    "keywords": [
+        "Tradelite",
+        "Financial Entertainment",
+        "Market Data"
+    ],
+    "author": {
+        "name": "Dom Derrien",
+        "email": "dd@tradelite.de",
+        "url": "https://tradelite.de/"
+    },
+    "samples": [
+        {
+            "displayName": "Simple Controller",
+            "description": "Simple use of the UserService to get one identified user record and to get all user records (can be served in pages).",
+            "path": "Samples~/SimpleController"
+        }
+    ]
+}
