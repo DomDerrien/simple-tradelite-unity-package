@@ -109,7 +109,7 @@ namespace Tradelite.SDK.DAO
                 }
                 else if (request.responseCode == 203) // No Content
                 {
-                    return new T[](0);
+                    return new T[0];
                 }
 
             }
