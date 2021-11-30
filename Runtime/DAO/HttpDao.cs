@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Text;
 using System.Web;
 
 using UnityEngine;
@@ -54,7 +55,7 @@ namespace Tradelite.SDK.DAO
             request.SetRequestHeader("Content-Type", "application/json; charset=UTF-8"); // Harmless if not required
             if (authToken != null)
             {
-                request.SetRequestHeader("Authorization", "beader " + authToken);
+                request.SetRequestHeader("Authorization", "Bearer " + authToken);
             }
             return request;
         }
@@ -135,7 +136,7 @@ namespace Tradelite.SDK.DAO
 
         public async Task<string> Create(T entity)
         {
-            string url = baseUrl + ".json";
+            string url = baseUrl + ".txt";
 
             try
             {

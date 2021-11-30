@@ -29,7 +29,7 @@ namespace Tradelite.SDK.DAO
 
         public new async Task<string> Create(Credentials entity)
         {
-            string url = baseUrl + ".json";
+            string url = baseUrl + ".txt";
 
             try
             {
