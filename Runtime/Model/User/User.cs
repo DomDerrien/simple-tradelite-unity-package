@@ -6,7 +6,8 @@ using Tradelite.SDK.Model;
 namespace Tradelite.SDK.Model.UserScope
 {
     [Serializable]
-    public class User: BaseModel {
+    public class User: BaseModel
+    {
         public string firstname;
         public string lastname;
         public string birthday;

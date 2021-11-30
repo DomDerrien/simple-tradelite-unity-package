@@ -9,9 +9,9 @@ namespace Tradelite.SDK.DAO
     public interface AbstractDao<T> where T : BaseModel
     {
         // Asynchornous w/ async/await
-        Task<T> Get(string id);
-        Task<T[]> Select(Hashtable parameters);
-        // Task<string> Create(T entity);
+        Task<T> Get(string id, Hashtable parameters = null);
+        Task<T[]> Select(Hashtable parameters = null);
+        Task<string> Create(T entity);
         // Task<string> Update(string id, T partialEntity);
         // Task Delete(string id);
 

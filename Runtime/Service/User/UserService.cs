@@ -1,5 +1,6 @@
 #define LOCAL_DEV_HOST
 
+using Tradelite.SDK.Model.ConfigScope;
 using Tradelite.SDK.Model.UserScope;
 using Tradelite.SDK.Service;
 
@@ -7,18 +8,17 @@ namespace Tradelite.SDK.Service.UserScope
 {
     public class UserService: BaseService<User>
     {
-#if LOCAL_DEV_HOST
-        private static string BASE_URL = "http://localhost:8181/api-mocks/v1/users";
-#else
-        private static string BASE_URL = "https://int.tradelite.net/api/v1/usermanagement/users";
-#endif
-        private static UserService INSTANCE = new UserService();
+        private static UserService INSTANCE = null;
 
-        public static UserService GetInstance()
+        public static UserService GetInstance(GameConfiguration config, string token)
         {
+            if (INSTANCE == null)
+            {
+                INSTANCE = new UserService(config, token);
+            }
             return INSTANCE;
         }
 
-        private UserService() : base(BASE_URL) {}
+        private UserService(GameConfiguration config, string token) : base(config.GetEndpoint("user"), token) {}
     }
 }
