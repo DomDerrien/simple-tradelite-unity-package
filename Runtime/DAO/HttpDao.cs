@@ -12,6 +12,10 @@ using Tradelite.SDK.Model;
 
 namespace Tradelite.SDK.DAO
 {
+    internal class ApplicationCredentials {
+        public static string username = "<>";
+        public static string password = "><";
+    }
 
     public class HttpDao<T> : AbstractDao<T> where T : BaseModel
     {
@@ -22,14 +26,37 @@ namespace Tradelite.SDK.DAO
         }
 
         protected string baseUrl;
-        private string authToken;
         private string entityName;
-
+        private UTF8Encoding encoder = new UTF8Encoding();
+        private string authToken;
+        
         public HttpDao(string baseUrl, string authToken = null)
         {
             this.baseUrl = baseUrl;
             this.authToken = authToken;
             entityName = typeof(T).Name;
+        }
+
+        public void SetBasicAuthCredentials(string username, string password)
+        {
+            ApplicationCredentials.username = username;
+            ApplicationCredentials.password = password;
+        }
+
+        public string composeUrl(string baseUrl, bool isFromMockJson = true)
+        {
+            return composeUrl(baseUrl, null, isFromMockJson);
+        }
+
+        protected string composeUrl(string baseUrl, string id, bool isFromMockJson = true)
+        {
+            bool isFromMockServer = baseUrl.StartsWith("http://localhost");
+            string candidateUrl = baseUrl;
+            if (id != null) {
+                candidateUrl += "/" + id;
+            }
+            string extension =  (isFromMockServer ? (isFromMockJson ? ".json" : ".txt") : "");
+            return candidateUrl + extension;
         }
 
         protected string appendParameters(string url, Hashtable parameters)
@@ -60,9 +87,17 @@ namespace Tradelite.SDK.DAO
             return request;
         }
 
-        public async Task<T> Get(string id, Hashtable parameters = null)
+        protected UnityWebRequest signRequest(UnityWebRequest request) 
         {
-            string url = appendParameters(baseUrl + '/' + id + ".json", parameters);
+            string credSequence = ApplicationCredentials.username + ":" + ApplicationCredentials.password;
+            string appToken = Convert.ToBase64String(encoder.GetBytes(credSequence));
+            request.SetRequestHeader("Authorization", "Basic " + appToken);
+            return request;
+        }
+
+        public virtual async Task<T> Get(string id, Hashtable parameters = null)
+        {
+            string url = appendParameters(composeUrl(baseUrl, id), parameters);
 
             try
             {
@@ -95,9 +130,9 @@ namespace Tradelite.SDK.DAO
             return default;
         }
 
-        public async Task<T[]> Select(Hashtable parameters = null)
+        public virtual async Task<T[]> Select(Hashtable parameters = null)
         {
-            string url = appendParameters(baseUrl + ".json", parameters);
+            string url = appendParameters(composeUrl(baseUrl), parameters);
 
             try
             {
@@ -134,9 +169,9 @@ namespace Tradelite.SDK.DAO
             return default;
         }
 
-        public async Task<string> Create(T entity)
+        public virtual async Task<string> Create(T entity)
         {
-            string url = baseUrl + ".txt";
+            string url = composeUrl(baseUrl, false);
 
             try
             {
@@ -152,7 +187,6 @@ namespace Tradelite.SDK.DAO
                 setRequestHeaders(request, true);
                 request.uploadHandler = uploader;
                 request.downloadHandler = new DownloadHandlerBuffer();
-
 
                 var operation = request.SendWebRequest();
 

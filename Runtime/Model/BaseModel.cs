@@ -7,16 +7,20 @@ namespace Tradelite.SDK.Model
     public class BaseModel
     {
         public string id;
-        public long created;
-        public long updated;
+        public string dateCreated = null;
+        public string dateUpdate = null;
+        public string dateSuspend = null;
+        public string dateDeleted = null;
         public string ownerId;
 
         public override string ToString()
         {
             List<string> output = new List<string>();
-            output.Add($"id: `{id}`");
-            if (created != 0) output.Add( $"created: {created}");
-            if (updated != 0) output.Add( $"updated: {updated}");
+            if (!string.IsNullOrEmpty(id)) output.Add( $"id: `{id}`");
+            if (!string.IsNullOrEmpty(dateCreated)) output.Add( $"dateCreated: `{dateCreated}`");
+            if (!string.IsNullOrEmpty(dateUpdate)) output.Add( $"dateUpdate: `{dateUpdate}`");
+            if (!string.IsNullOrEmpty(dateSuspend)) output.Add( $"dateSuspend: `{dateSuspend}`");
+            if (!string.IsNullOrEmpty(dateDeleted)) output.Add( $"dateDeleted: `{dateDeleted}`");
             if (!string.IsNullOrEmpty(ownerId)) output.Add( $"ownerId: `{ownerId}`");
             return String.Join(", ", output);
         }

@@ -11,9 +11,14 @@ namespace Tradelite.SDK.Model.ConfigScope
     public class GameConfiguration: BaseModel
     {
         public ServiceEndpoint[] serviceEndpoints;
+        public CredentialSet[] credentials;
 
         public string GetEndpoint(string key) {
             return serviceEndpoints.First(endpoint => endpoint.key == key).url;
+        }
+
+        public string GetCredential(string label) {
+            return credentials.First(credential => credential.label == label).value;
         }
 
         public override string ToString()
@@ -21,14 +26,7 @@ namespace Tradelite.SDK.Model.ConfigScope
             List<string> output = new List<string>();
             output.Add(base.ToString());
             int endpointNb = serviceEndpoints == null ? 0 : serviceEndpoints.Length;
-            if (endpointNb == 0)
-            {
-                output.Add($"serviceEndpoints: (0) []");
-            }
-            else
-            {
-                output.Add($"serviceEndpoints: ({endpointNb}) [ {String.Join<ServiceEndpoint>(", ", serviceEndpoints)} ]");
-            }
+            output.Add($"questionIds: ({endpointNb}) [{(endpointNb == 0 ? "" : String.Join<ServiceEndpoint>(", ", serviceEndpoints))}]");
             return String.Join(", ", output);
         }
     }
@@ -42,6 +40,18 @@ namespace Tradelite.SDK.Model.ConfigScope
         public override string ToString() 
         {
             return "{ " + key + ": \"" + url + "\"}";
+        }
+    }
+
+    [Serializable]
+    public class CredentialSet
+    {
+        public string label;
+        public string value; 
+
+        public override string ToString() 
+        {
+            return "{ " + label + ": \"" + value + "\"}";
         }
     }
 }
