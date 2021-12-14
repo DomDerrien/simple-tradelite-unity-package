@@ -14,11 +14,25 @@ namespace Tradelite.SDK.Model.ConfigScope
         public CredentialSet[] credentials;
 
         public string GetEndpoint(string key) {
-            return serviceEndpoints.First(endpoint => endpoint.key == key).url;
+            try
+            {
+                return serviceEndpoints.First(endpoint => endpoint.key == key).url;
+            }
+            catch(Exception)
+            {
+                throw new Exception($"Cannot get entry w/ key {key} from the loaded configuration!");
+            }
         }
 
         public string GetCredential(string label) {
-            return credentials.First(credential => credential.label == label).value;
+            try
+            {
+                return credentials.First(credential => credential.label == label).value;
+            }
+            catch(Exception)
+            {
+                throw new Exception($"Cannot get entry w/ key {label} from the loaded configuration!");
+            }
         }
 
         public override string ToString()

@@ -57,7 +57,7 @@ namespace Tradelite.SDK.DAO.UserScope
 
         public override async Task<string> Create(User entity)
         {
-            string url = composeUrl(baseUrl);
+            string url = composeUrl(baseUrl,"post");
 
             // curl \
             //   --location

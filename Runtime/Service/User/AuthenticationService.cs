@@ -29,9 +29,7 @@ namespace Tradelite.SDK.Service.UserScope
         private AuthenticationService(GameConfiguration gameConfig): base(null, gameConfig)
         {
             // Override of the default HttpDao<Credentials> b/c the `Create()` method has a unique process
-            Debug.Log("111 " + dao);
             dao = new AuthenticationHttpDao(gameConfig.GetEndpoint("authentication"));
-            Debug.Log("222 " + dao);
         }
 
         public async Task<string> Authenticate(string username, string password) 
@@ -39,7 +37,6 @@ namespace Tradelite.SDK.Service.UserScope
             Credentials creds = new Model.UserScope.Credentials();
             creds.username = username;
             creds.password = password;
-            Debug.Log("333 " + dao);
             token = await dao.Create(creds);
             fullToken = creds.fullToken;
             return token;

@@ -23,7 +23,7 @@ namespace Tradelite.SDK.Model.UserScope
         public string dateAcceptConditions = null;
         public string acceptConditionsVersion = null;
         public bool ageVerification;
-        public bool mobile;
+        public bool mobile = true;
 
         public string tenantId;
         public Tenant tenant = null;

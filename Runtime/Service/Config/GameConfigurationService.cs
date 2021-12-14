@@ -14,11 +14,11 @@ namespace Tradelite.SDK.Service.ConfigScope
     {
         private static GameConfigurationService INSTANCE = null;
 
-        public static GameConfigurationService GetInstance(GameIdentifier gameId, bool forceReload = false, string source = "http://localhost:8181/api-mocks/v1/game-config")
+        public static GameConfigurationService GetInstance(string gameId, bool forceReload = false, string source = "http://localhost:8181/api-mocks/v1/game-config")
         {
             if (INSTANCE == null || forceReload)
             {
-                INSTANCE = new GameConfigurationService(gameId.ToString(), source);
+                INSTANCE = new GameConfigurationService(gameId, source);
             }
             return INSTANCE;
         }
@@ -37,13 +37,8 @@ namespace Tradelite.SDK.Service.ConfigScope
                 // Delayed retrieval
                 gameConfig = await dao.Get(gameId);
                 dao.SetBasicAuthCredentials(
-                    gameConfig.GetCredential("shared627") +
-                    gameConfig.GetCredential("shared334"),
-                    gameConfig.GetCredential("shared482") +
-                    gameConfig.GetCredential("shared543") +
-                    gameConfig.GetCredential("shared734") +
-                    gameConfig.GetCredential("shared846") +
-                    gameConfig.GetCredential("shared912")
+                    gameConfig.GetCredential("clientId"),
+                    gameConfig.GetCredential("clientSecret")
                 );
             }
             return gameConfig;

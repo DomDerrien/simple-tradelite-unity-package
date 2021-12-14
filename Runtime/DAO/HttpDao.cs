@@ -43,19 +43,19 @@ namespace Tradelite.SDK.DAO
             ApplicationCredentials.password = password;
         }
 
-        public string composeUrl(string baseUrl, bool isFromMockJson = true)
+        public string composeUrl(string baseUrl, string httpVerb, bool isFromMockJson = true)
         {
-            return composeUrl(baseUrl, null, isFromMockJson);
+            return composeUrl(baseUrl, null, httpVerb, isFromMockJson);
         }
 
-        protected string composeUrl(string baseUrl, string id, bool isFromMockJson = true)
+        protected string composeUrl(string baseUrl, string id, string httpVerb, bool isFromMockJson = true)
         {
             bool isFromMockServer = baseUrl.StartsWith("http://localhost");
             string candidateUrl = baseUrl;
             if (id != null) {
                 candidateUrl += "/" + id;
             }
-            string extension =  (isFromMockServer ? (isFromMockJson ? ".json" : ".txt") : "");
+            string extension =  (isFromMockServer ? "." + httpVerb.ToLower() + (isFromMockJson ? ".json" : ".txt") : "");
             return candidateUrl + extension;
         }
 
@@ -97,7 +97,7 @@ namespace Tradelite.SDK.DAO
 
         public virtual async Task<T> Get(string id, Hashtable parameters = null)
         {
-            string url = appendParameters(composeUrl(baseUrl, id), parameters);
+            string url = appendParameters(composeUrl(baseUrl, id, "get"), parameters);
 
             try
             {
@@ -132,7 +132,7 @@ namespace Tradelite.SDK.DAO
 
         public virtual async Task<T[]> Select(Hashtable parameters = null)
         {
-            string url = appendParameters(composeUrl(baseUrl), parameters);
+            string url = appendParameters(composeUrl(baseUrl, "get"), parameters);
 
             try
             {
@@ -171,7 +171,7 @@ namespace Tradelite.SDK.DAO
 
         public virtual async Task<string> Create(T entity)
         {
-            string url = composeUrl(baseUrl, false);
+            string url = composeUrl(baseUrl, "post", false);
 
             try
             {
