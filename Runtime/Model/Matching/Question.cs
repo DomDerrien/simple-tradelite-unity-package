@@ -12,6 +12,7 @@ namespace Tradelite.SDK.Model.MatchingScope
     {
         public Category category;
         public string[] locales = new string[] { "en" };
+        public int choiceNb = 2;
         public bool useShort = true;
         public string shortQuestionId;
         public string longQuestionId;
@@ -23,16 +24,17 @@ namespace Tradelite.SDK.Model.MatchingScope
             List<string> output = new List<string>();
             output.Add(base.ToString());
             output.Add($"category: {category}");
-            output.Add($"locales: ({locales.Count()}) [ {String.Join<string>(", ", locales)} ]");
+            output.Add($"locales: ({locales.Count()}) [ `{String.Join<string>("`, `", locales)}` ]");
+            output.Add($"choiceNb: {choiceNb}");
             if (useShort)
             {
-                output.Add($"shortQuestionId: {shortQuestionId}");
-                output.Add($"shortChoiceIds: ({shortChoiceIds.Count()}) [ {String.Join<string>(", ", shortChoiceIds)} ]");
+                output.Add($"shortQuestionId: `{shortQuestionId}`");
+                output.Add($"shortChoiceIds: ({shortChoiceIds.Count()}) [ `{String.Join<string>("`, `", shortChoiceIds)}` ]");
             }
             else
             {
-                output.Add($"longQuestionId: {longQuestionId}");
-                output.Add($"longChoiceIds: ({longChoiceIds.Count()}) [ {String.Join<string>(", ", longChoiceIds)} ]");
+                output.Add($"longQuestionId: `{longQuestionId}`");
+                output.Add($"longChoiceIds: (`{longChoiceIds.Count()}) [ {String.Join<string>("`, `", longChoiceIds)}` ]");
             }
             return String.Join(", ", output);
         }
@@ -43,6 +45,7 @@ namespace Tradelite.SDK.Model.MatchingScope
         quaterlyPerformance,
         yearlyPerformance,
         ceoName,
+        hqCountry,
         boardDirectorName,
         headQuarterLocation,
         lastYearMarketCapitalization,

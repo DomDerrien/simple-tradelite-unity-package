@@ -69,7 +69,16 @@ namespace Tradelite.SDK.DAO
             List<string> combinations = new List<string>();
             foreach (string key in parameters.Keys)
             {
-                combinations.Add(key + "=" + HttpUtility.UrlEncode((string)parameters[key]));
+                var value = parameters[key];
+                if (value.GetType() == typeof(string[])) {
+                    foreach(string individual in( (string[])value))
+                    {
+                        combinations.Add(key + "=" + HttpUtility.UrlEncode((string)individual));
+                    }
+                }
+                else {
+                    combinations.Add(key + "=" + HttpUtility.UrlEncode((string)value));
+                }
             }
  
             return url + '?' + string.Join("&", combinations);
@@ -132,7 +141,9 @@ namespace Tradelite.SDK.DAO
 
         public virtual async Task<T[]> Select(Hashtable parameters = null)
         {
+            Debug.Log("222");
             string url = appendParameters(composeUrl(baseUrl, "get"), parameters);
+            Debug.Log("333 " + url);
 
             try
             {
