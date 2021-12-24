@@ -1,20 +1,16 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
-
+using Tradelite.SDK.DAO;
+using Tradelite.SDK.Model.UserScope;
 using UnityEngine;
 using UnityEngine.Networking;
 
-using Tradelite.SDK.DAO;
-using Tradelite.SDK.Model.UserScope;
-
-namespace Tradelite.SDK.DAO.UserScope
-{
-    class UserForCreation
-    {
+namespace Tradelite.SDK.DAO.UserScope {
+    class UserForCreation {
         public string email;
         public string password;
         public string birthday;
@@ -28,8 +24,7 @@ namespace Tradelite.SDK.DAO.UserScope
         public bool mobile;
         public string tenantId;
 
-        public UserForCreation From(User user)
-        {
+        public UserForCreation From(User user) {
             this.email = user.email;
             this.password = user.password;
             this.birthday = user.birthday;
@@ -46,18 +41,15 @@ namespace Tradelite.SDK.DAO.UserScope
         }
     }
 
-    public class UserHttpDao : HttpDao<User>
-    {
-        public UserHttpDao(string baseUrl, string authToken = null): base(baseUrl, authToken) {}
+    public class UserHttpDao : HttpDao<User> {
+        public UserHttpDao(string baseUrl, string authToken = null) : base(baseUrl, authToken) { }
 
-        public override Task<User[]> Select(Hashtable parameters)
-        {
+        public override Task<User[]> Select(Hashtable parameters) {
             throw new InvalidOperationException("Unsupported operation");
         }
 
-        public override async Task<string> Create(User entity)
-        {
-            string url = composeUrl(baseUrl,"post");
+        public override async Task<string> Create(User entity) {
+            string url = composeUrl(baseUrl, "post");
 
             // curl \
             //   --location
@@ -67,13 +59,12 @@ namespace Tradelite.SDK.DAO.UserScope
             //   --data-raw '{ <user-details> }' \
             //   'https://int.tradelite.net/user-management/v1.0/user'
 
-            try
-            {
+            try {
                 string payload = JsonUtility.ToJson((new UserForCreation()).From(entity));
 
                 UTF8Encoding encoder = new UTF8Encoding();
                 byte[] encodedPayload = encoder.GetBytes(payload);
-                
+
                 UploadHandler uploader = new UploadHandlerRaw(encodedPayload);
                 uploader.contentType = "application/json";
 
@@ -84,13 +75,11 @@ namespace Tradelite.SDK.DAO.UserScope
 
                 var operation = request.SendWebRequest();
 
-                while (!operation.isDone)
-                {
+                while (!operation.isDone) {
                     await Task.Yield();
                 }
 
-                if (request.result != UnityWebRequest.Result.Success)
-                {
+                if (request.result != UnityWebRequest.Result.Success) {
                     Debug.LogError($"Failed: {request.error}");
                 }
                 else if (request.responseCode == 201) // OK
@@ -103,8 +92,7 @@ namespace Tradelite.SDK.DAO.UserScope
                 }
 
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 Debug.LogError($"A failed with message: {ex.Message}");
             }
 

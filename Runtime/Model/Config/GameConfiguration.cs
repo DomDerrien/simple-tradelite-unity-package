@@ -1,42 +1,34 @@
 using System;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 using Tradelite.SDK.Model;
 
-namespace Tradelite.SDK.Model.ConfigScope
-{
+namespace Tradelite.SDK.Model.ConfigScope {
     [Serializable]
-    public class GameConfiguration: BaseModel
-    {
+    public class GameConfiguration : BaseModel {
         public ServiceEndpoint[] serviceEndpoints;
         public CredentialSet[] credentials;
 
         public string GetEndpoint(string key) {
-            try
-            {
+            try {
                 return serviceEndpoints.First(endpoint => endpoint.key == key).url;
             }
-            catch(Exception)
-            {
+            catch (Exception) {
                 throw new Exception($"Cannot get entry w/ key {key} from the loaded configuration!");
             }
         }
 
         public string GetCredential(string label) {
-            try
-            {
+            try {
                 return credentials.First(credential => credential.label == label).value;
             }
-            catch(Exception)
-            {
+            catch (Exception) {
                 throw new Exception($"Cannot get entry w/ key {label} from the loaded configuration!");
             }
         }
 
-        public override string ToString()
-        {
+        public override string ToString() {
             List<string> output = new List<string>();
             output.Add(base.ToString());
             int endpointNb = serviceEndpoints == null ? 0 : serviceEndpoints.Length;
@@ -46,25 +38,21 @@ namespace Tradelite.SDK.Model.ConfigScope
     }
 
     [Serializable]
-    public class ServiceEndpoint
-    {
+    public class ServiceEndpoint {
         public string key;
-        public string url; 
+        public string url;
 
-        public override string ToString() 
-        {
+        public override string ToString() {
             return "{ " + key + ": \"" + url + "\"}";
         }
     }
 
     [Serializable]
-    public class CredentialSet
-    {
+    public class CredentialSet {
         public string label;
-        public string value; 
+        public string value;
 
-        public override string ToString() 
-        {
+        public override string ToString() {
             return "{ " + label + ": \"" + value + "\"}";
         }
     }

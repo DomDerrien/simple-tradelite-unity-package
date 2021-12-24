@@ -1,24 +1,19 @@
 using System;
 using System.Collections;
 using System.Threading.Tasks;
-using UnityEngine;
-
 using Tradelite.SDK.DAO.UserScope;
 using Tradelite.SDK.Model;
 using Tradelite.SDK.Model.ConfigScope;
 using Tradelite.SDK.Model.UserScope;
 using Tradelite.SDK.Service;
+using UnityEngine;
 
-namespace Tradelite.SDK.Service.UserScope
-{
-    public class AuthenticationService: BaseService<Credentials>
-    {
+namespace Tradelite.SDK.Service.UserScope {
+    public class AuthenticationService : BaseService<Credentials> {
         private static AuthenticationService INSTANCE = null;
 
-        public static AuthenticationService GetInstance(GameConfiguration gameConfig, bool forceReload = false)
-        {
-            if (INSTANCE == null || forceReload)
-            {
+        public static AuthenticationService GetInstance(GameConfiguration gameConfig, bool forceReload = false) {
+            if (INSTANCE == null || forceReload) {
                 INSTANCE = new AuthenticationService(gameConfig);
             }
             return INSTANCE;
@@ -26,14 +21,12 @@ namespace Tradelite.SDK.Service.UserScope
 
         private AuthorizationResponse fullToken;
 
-        private AuthenticationService(GameConfiguration gameConfig): base(null, gameConfig)
-        {
+        private AuthenticationService(GameConfiguration gameConfig) : base(null, gameConfig) {
             // Override of the default HttpDao<Credentials> b/c the `Create()` method has a unique process
             dao = new AuthenticationHttpDao(gameConfig.GetEndpoint("authentication"));
         }
 
-        public async Task<string> Authenticate(string username, string password) 
-        {
+        public async Task<string> Authenticate(string username, string password) {
             Credentials creds = new Model.UserScope.Credentials();
             creds.username = username;
             creds.password = password;
@@ -42,14 +35,11 @@ namespace Tradelite.SDK.Service.UserScope
             return token;
         }
 
-        public async void Authenticate(string username, string password, Action<string> success, Action<BaseError> failure)
-        {
-            try
-            {
+        public async void Authenticate(string username, string password, Action<string> success, Action<BaseError> failure) {
+            try {
                 success?.Invoke(await Authenticate(username, password));
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 failure?.Invoke(new BaseError($"Cannot authenticate user with username: {username}", ex));
             }
         }
@@ -58,18 +48,15 @@ namespace Tradelite.SDK.Service.UserScope
             return await (UserService.GetInstance(gameConfig, fullToken.access_token)).Get(fullToken.id + "");
         }
 
-        public override Task<Credentials> Get(string id, Hashtable parameters = null) 
-        {
+        public override Task<Credentials> Get(string id, Hashtable parameters = null) {
             throw new InvalidOperationException("Not supported!");
         }
 
-        public override Task<Credentials[]>Select(Hashtable parameters = null) 
-        {
+        public override Task<Credentials[]> Select(Hashtable parameters = null) {
             throw new InvalidOperationException("Not supported!");
         }
 
-        public override Task<string> Create(Credentials entity) 
-        {
+        public override Task<string> Create(Credentials entity) {
             throw new InvalidOperationException("Not supported!");
         }
     }

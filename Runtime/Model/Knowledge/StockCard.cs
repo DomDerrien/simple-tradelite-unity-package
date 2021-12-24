@@ -1,15 +1,12 @@
 using System;
-using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-
+using System.Linq;
 using Tradelite.SDK.Model;
 
-namespace Tradelite.SDK.Model.KnowledgeScope
-{
+namespace Tradelite.SDK.Model.KnowledgeScope {
     [Serializable]
-    public class StockCard: BaseModel
-    {
+    public class StockCard : BaseModel {
         public string name;
         public string description;
         public string logo;
@@ -23,8 +20,7 @@ namespace Tradelite.SDK.Model.KnowledgeScope
         public Quote[] monthlyQuotePrices;
         public Quote[] monthlyMarketCapitalizations;
 
-        public override string ToString()
-        {
+        public override string ToString() {
             List<string> output = new List<string>();
             output.Add(base.ToString());
             output.Add($"name: `{name}`");
@@ -43,8 +39,7 @@ namespace Tradelite.SDK.Model.KnowledgeScope
         }
     }
 
-    public class Address: BaseModel
-    {
+    public class Address : BaseModel {
         public string country;
         public string address;
         public string street;
@@ -52,8 +47,7 @@ namespace Tradelite.SDK.Model.KnowledgeScope
         public string city;
         public string stateOrProvince;
 
-        public override string ToString()
-        {
+        public override string ToString() {
             List<string> output = new List<string>();
             output.Add(base.ToString());
             output.Add($"country: `{country}`");
@@ -66,15 +60,13 @@ namespace Tradelite.SDK.Model.KnowledgeScope
         }
     }
 
-    public class Role: BaseModel
-    {
+    public class Role : BaseModel {
         public RoleType type;
         public string fullname;
         public string nationality;
         public Address address;
 
-        public override string ToString()
-        {
+        public override string ToString() {
             List<string> output = new List<string>();
             output.Add(base.ToString());
             output.Add($"type: {type}");
@@ -85,8 +77,7 @@ namespace Tradelite.SDK.Model.KnowledgeScope
         }
     }
 
-    public enum RoleType
-    {
+    public enum RoleType {
         CEO,
         CFO,
         President,
@@ -96,13 +87,11 @@ namespace Tradelite.SDK.Model.KnowledgeScope
         BoardDirector
     }
 
-    public class Quote: BaseModel
-    {
+    public class Quote : BaseModel {
         public string date;
         public float value;
 
-        public override string ToString()
-        {
+        public override string ToString() {
             List<string> output = new List<string>();
             output.Add(base.ToString());
             output.Add($"date: `{date}`");

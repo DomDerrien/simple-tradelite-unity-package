@@ -1,35 +1,28 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using System.Text;
+using System.Threading.Tasks;
 using System.Web;
-
+using Tradelite.SDK.DAO;
+using Tradelite.SDK.Model.UserScope;
 using UnityEngine;
 using UnityEngine.Networking;
 
-using Tradelite.SDK.DAO;
-using Tradelite.SDK.Model.UserScope;
+namespace Tradelite.SDK.DAO.UserScope {
 
-namespace Tradelite.SDK.DAO.UserScope
-{
+    public class AuthenticationHttpDao : HttpDao<Credentials> {
+        public AuthenticationHttpDao(string baseUrl) : base(baseUrl) { }
 
-    public class AuthenticationHttpDao : HttpDao<Credentials>
-    {
-        public AuthenticationHttpDao(string baseUrl): base(baseUrl) {}
-
-        public override Task<Credentials> Get(string id, Hashtable parameters)
-        {
+        public override Task<Credentials> Get(string id, Hashtable parameters) {
             throw new InvalidOperationException("Unsupported operation");
         }
 
-        public override Task<Credentials[]> Select(Hashtable parameters)
-        {
+        public override Task<Credentials[]> Select(Hashtable parameters) {
             throw new InvalidOperationException("Unsupported operation");
         }
 
-        public override async Task<string> Create(Credentials entity)
-        {
+        public override async Task<string> Create(Credentials entity) {
             string url = composeUrl(baseUrl, "post");
 
             // curl \
@@ -40,8 +33,7 @@ namespace Tradelite.SDK.DAO.UserScope
             //  -H "Authorization: Basic <username:password>" \
             //  https://int.midas-trader.net/bw-oauth/oauth/token
 
-            try
-            {
+            try {
                 WWWForm form = new WWWForm();
                 form.AddField("username", entity.username);
                 form.AddField("password", entity.password);
@@ -55,13 +47,11 @@ namespace Tradelite.SDK.DAO.UserScope
 
                 var operation = request.SendWebRequest();
 
-                while (!operation.isDone)
-                {
+                while (!operation.isDone) {
                     await Task.Yield();
                 }
 
-                if (request.result != UnityWebRequest.Result.Success)
-                {
+                if (request.result != UnityWebRequest.Result.Success) {
                     Debug.LogError($"Failed: {request.error}");
                 }
                 else if (request.responseCode == 200) // OK
@@ -75,8 +65,7 @@ namespace Tradelite.SDK.DAO.UserScope
                 }
 
             }
-            catch (Exception ex)
-            {
+            catch (Exception ex) {
                 Debug.LogError($"A failed with message: {ex.Message}");
             }
 
