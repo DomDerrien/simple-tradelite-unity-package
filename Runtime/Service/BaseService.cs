@@ -57,5 +57,18 @@ namespace Tradelite.SDK.Service {
                 failure?.Invoke(new BaseError($"Cannot create entity of class {entityName}", ex));
             }
         }
-    }
+ 
+        public async virtual Task Delete(string id) {
+            await dao.Delete(id);
+        }
+
+        public async void Delete(string id, Action success, Action<BaseError> failure) {
+            try {
+                await Delete(id);
+                success?.Invoke();
+            }
+            catch (Exception ex) {
+                failure?.Invoke(new BaseError($"Cannot delete entity of class {entityName} w/ id {id}", ex));
+            }
+        }    }
 }

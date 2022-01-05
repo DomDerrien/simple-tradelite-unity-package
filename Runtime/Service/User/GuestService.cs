@@ -29,7 +29,7 @@ namespace Tradelite.SDK.Service.UserScope {
             onlineDao = new HttpDao<Guest>(gameConfig.GetEndpoint("guest"), token);
         }
 
-        public async Task<Guest> Get(string id = null, Hashtable parameters = null) {
+        public override async Task<Guest> Get(string id = null, Hashtable parameters = null) {
             Guest guest = await offlineDao.Get("activeGuest");
             if (guest == null || id != null && guest.id != id) {
                 throw new ObjectDisposedException(entityName);
@@ -37,22 +37,23 @@ namespace Tradelite.SDK.Service.UserScope {
             return guest;
         }
 
-        public async Task<string> Create(Guest entity = null) {
+        public override async Task<string> Create(Guest entity = null) {
             Guest existingGuest = await offlineDao.Get("activeGuest");
             if (existingGuest != null) {
-                UnityEngine.Debug.Log("Retrieving guest account from local storage");
+                UnityEngine.Debug.Log("Retrieving guest account from local storage!");
                 return existingGuest.id;
             }
 
             string guestId = await onlineDao.Create(new Guest());
             Guest guest = await onlineDao.Get(guestId);
 
-            offlineDao.Create(guest, "activeGuest");
+            await offlineDao.Create(guest, "activeGuest");
 
             return guestId;
         }
-        public void Delete(string id) {
+        public override Task Delete(string id) {
             offlineDao.Delete("activeGuest");
+            return Task.CompletedTask;
         }
     }
 }
