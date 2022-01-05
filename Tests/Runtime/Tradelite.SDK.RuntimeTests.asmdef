@@ -1,9 +1,11 @@
 {
-    "name": "Tradelite.SDK",
+    "name": "Tradelite.SDK.Tests",
     "rootNamespace": "",
     "references": [
-        "UnityEngine.UI",
-        "System"
+        "Tradelite.SDK"
+    ],
+    "optionalUnityReferences": [
+        "TestAssemblies"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

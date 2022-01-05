@@ -1,12 +1,15 @@
 {
     "name": "net.tradelite.sdk.unity",
-    "version": "0.1.2",
+    "version": "0.1.4",
     "displayName": "Tradelite SDK for Unity Games",
     "description": "This package provides utilities to connect to the Tradelite services to get tuned financial market data to report scores, to get the list of upcoming events, and to get the event leaderboards.",
     "unity": "2020.3",
-    "unityRelease": "22f1",
+    "unityRelease": "25f1",
     "dependencies": {
     },
+    "testables": [
+        "net.tradelite.sdk.unity"
+    ],
     "keywords": [
         "Tradelite",
         "Financial Entertainment",

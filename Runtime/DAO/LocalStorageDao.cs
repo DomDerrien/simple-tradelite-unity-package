@@ -24,7 +24,7 @@ namespace Tradelite.SDK.DAO {
             throw new NotSupportedException();
         }
 
-        public async Task<T> Get(string id, Hashtable parameters = null) {
+        public Task<T> Get(string id, Hashtable parameters = null) {
             try {
                 string key = $"_{gameId}_{entityName}_{id}";
                 if (!PlayerPrefs.HasKey(key)) {
@@ -32,7 +32,7 @@ namespace Tradelite.SDK.DAO {
                 }
 
                 string json = PlayerPrefs.GetString(key);
-                return JsonUtility.FromJson<T>(json);
+                return Task.FromResult(JsonUtility.FromJson<T>(json));
             }
             catch (Exception ex) {
                 Debug.LogError($"{nameof(Get)} for {entityName} w/ id: {id} failed with message: {ex.Message}");
@@ -41,19 +41,19 @@ namespace Tradelite.SDK.DAO {
             return default;
         }
 
-        public async Task<T[]> Select(Hashtable parameters = null) {
+        public Task<T[]> Select(Hashtable parameters = null) {
             throw new NotSupportedException();
         }
 
-        public async Task<string> Create(T entity) {
-            return await Create(entity, null);
+        public Task<string> Create(T entity) {
+            return Create(entity, null);
         }
 
-        public async Task<string> Create(T entity, string idOverride) {
+        public Task<string> Create(T entity, string idOverride) {
             try {
                 string key = $"_{gameId}_{entityName}_{(idOverride == null ? entity.id : idOverride)}";
                 PlayerPrefs.SetString(key, JsonUtility.ToJson(entity));
-                return entity.id;
+                return Task.FromResult(entity.id);
             }
             catch (Exception ex) {
                 Debug.LogError($"{nameof(Create)} of {entityName} w/ id: {entity.id} failed with message:: {ex.Message}");
