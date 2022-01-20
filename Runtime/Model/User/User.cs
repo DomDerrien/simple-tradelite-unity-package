@@ -7,7 +7,7 @@ using Tradelite.SDK.Model.TenantScope;
 namespace Tradelite.SDK.Model.UserScope {
     [Serializable]
     public class User : BaseModel {
-        public int idExternal;
+        public long idExternal;
         public string status = null;
         public string email = null;
         public string firstname = null;
@@ -29,7 +29,8 @@ namespace Tradelite.SDK.Model.UserScope {
 
         public override string ToString() {
             List<string> output = new List<string>();
-            output.Add(base.ToString());
+            string baseToString = base.ToString();
+            if (!string.IsNullOrEmpty(baseToString)) output.Add(baseToString);
 
             if (idExternal != 0) output.Add($"idExternal: {idExternal}");
             if (!string.IsNullOrEmpty(status)) output.Add($"status: `{status}`");
@@ -39,14 +40,14 @@ namespace Tradelite.SDK.Model.UserScope {
             if (!string.IsNullOrEmpty(lastname)) output.Add($"lastname: `{lastname}`");
             if (!string.IsNullOrEmpty(maidenname)) output.Add($"maidenname: `{maidenname}`");
             if (!string.IsNullOrEmpty(nickname)) output.Add($"nickname: `{nickname}`");
-            if (!string.IsNullOrEmpty(password)) output.Add($"password: `*********`");
+            if (!string.IsNullOrEmpty(password)) output.Add($"password: `**********`");
             if (!string.IsNullOrEmpty(birthday)) output.Add($"birthday: `{birthday}`");
             if (!string.IsNullOrEmpty(locale)) output.Add($"locale: `{locale}`");
 
             if (!string.IsNullOrEmpty(dateAcceptConditions)) output.Add($"dateAcceptConditions: `{dateAcceptConditions}`");
             if (!string.IsNullOrEmpty(acceptConditionsVersion)) output.Add($"acceptConditionsVersion: `{acceptConditionsVersion}`");
-            output.Add($"ageVerification: {(ageVerification ? "true" : "false")}");
-            output.Add($"mobile: {(mobile ? "true" : "false")}");
+            output.Add($"ageVerification: {(ageVerification)}");
+            output.Add($"mobile: {(mobile)}");
 
             if (!string.IsNullOrEmpty(tenantId)) output.Add($"tenantId: `{tenantId}`");
             if (tenant != null) output.Add($"tenant: {{ {tenant.ToString()} }}");

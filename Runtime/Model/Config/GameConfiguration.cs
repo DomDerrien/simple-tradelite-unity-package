@@ -30,7 +30,8 @@ namespace Tradelite.SDK.Model.ConfigScope {
 
         public override string ToString() {
             List<string> output = new List<string>();
-            output.Add(base.ToString());
+            string baseToString = base.ToString();
+            if (!string.IsNullOrEmpty(baseToString)) output.Add(baseToString);
             int endpointNb = serviceEndpoints == null ? 0 : serviceEndpoints.Length;
             output.Add($"questionIds: ({endpointNb}) [{(endpointNb == 0 ? "" : String.Join<ServiceEndpoint>(", ", serviceEndpoints))}]");
             return String.Join(", ", output);

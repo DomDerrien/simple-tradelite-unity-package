@@ -1,8 +1,7 @@
 using System;
 using NUnit.Framework;
-using Tradelite.SDK.Model;
 
-namespace Tradelite.SDK.Model.Test {
+namespace Tradelite.SDK.Model {
 
     public class BaseErrorTest {
         [Test]
