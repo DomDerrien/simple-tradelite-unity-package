@@ -14,12 +14,13 @@ namespace Tradelite.SDK.Model.UserScope {
 
         public override string ToString() {
             List<string> output = new List<string>();
-            output.Add(base.ToString());
+            string baseToString = base.ToString();
+            if (!string.IsNullOrEmpty(baseToString)) output.Add(baseToString);
 
-            output.Add($"nickname: `{nickname}`");
-            output.Add($"locale: `{locale}`");
-            output.Add($"hash: `*********`");
-            output.Add($"userId: `{userId}`");
+            if (!string.IsNullOrEmpty(nickname)) output.Add($"nickname: `{nickname}`");
+            if (!string.IsNullOrEmpty(locale)) output.Add($"locale: `{locale}`");
+            if (!string.IsNullOrEmpty(hash)) output.Add($"hash: `**********`");
+            if (!string.IsNullOrEmpty(userId)) output.Add($"userId: `{userId}`");
 
             return String.Join(", ", output);
         }

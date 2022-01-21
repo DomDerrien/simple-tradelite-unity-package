@@ -1,14 +1,33 @@
 using NUnit.Framework;
-using Tradelite.SDK.Model;
 
-namespace Tradelite.SDK.Model.Test {
+namespace Tradelite.SDK.Model {
 
     public class BaseModelTest {
         [Test]
-        public void TestToString() {
+        public void TestFreshBaseModelToString() {
             BaseModel entity =  new BaseModel();
-            string toString = entity.ToString();
-            Assert.IsEqual("id: ``", toString);
+            Assert.AreEqual("", entity.ToString());
+        }
+
+        [Test]
+        public void TestCompleteBaseModelToString() {
+            BaseModel entity =  new BaseModel {
+                id = "attr0",
+                dateCreated = "attr1",
+                dateUpdate = "attr2",
+                dateSuspend = "attr3",
+                dateDeleted = "attr4",
+                ownerId = "attr5",
+            };
+            Assert.AreEqual(
+                "id: `attr0`, " + 
+                "dateCreated: `attr1`, " + 
+                "dateUpdate: `attr2`, " + 
+                "dateSuspend: `attr3`, " + 
+                "dateDeleted: `attr4`, " + 
+                "ownerId: `attr5`", 
+                entity.ToString()
+            );
         }
     }
 }
