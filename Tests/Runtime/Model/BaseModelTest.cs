@@ -13,19 +13,16 @@ namespace Tradelite.SDK.Model {
         public void TestCompleteBaseModelToString() {
             BaseModel entity =  new BaseModel {
                 id = "attr0",
-                dateCreated = "attr1",
-                dateUpdate = "attr2",
-                dateSuspend = "attr3",
-                dateDeleted = "attr4",
-                ownerId = "attr5",
+                version = 1,
+                created = 2,
+                updated = 3,
+                authorId = "attr4",
             };
             Assert.AreEqual(
                 "id: `attr0`, " + 
-                "dateCreated: `attr1`, " + 
-                "dateUpdate: `attr2`, " + 
-                "dateSuspend: `attr3`, " + 
-                "dateDeleted: `attr4`, " + 
-                "ownerId: `attr5`", 
+                "created: 2, " + 
+                "updated: 3, " + 
+                "authorId: `attr4`", 
                 entity.ToString()
             );
         }
