@@ -10,9 +10,8 @@ using UnityEngine.Networking;
 
 namespace Tradelite.SDK.DAO {
 
-    internal class ApplicationCredentials {
-        public static string username = "<>";
-        public static string password = "><";
+    internal static class StaticAuthInfo {
+        public static string jwtToken { get; set; }
     }
 
     public class HttpDao<T> : AbstractDao<T> where T : BaseModel {
@@ -21,33 +20,32 @@ namespace Tradelite.SDK.DAO {
             public T[] list;
         }
 
+        public static string jwtToken {
+            get { return StaticAuthInfo.jwtToken; }
+            set { StaticAuthInfo.jwtToken = value; }
+        }
+
+        protected Boolean fromS3;
         protected string baseUrl;
         private string entityName;
         private UTF8Encoding encoder = new UTF8Encoding();
-        private string authToken;
 
-        public HttpDao(string baseUrl, string authToken = null) {
-            this.baseUrl = baseUrl;
-            this.authToken = authToken;
+        public HttpDao(string dataSource) {
+            this.baseUrl = dataSource;
+            this.fromS3 = dataSource.ToString().IndexOf("/data") != -1;
             entityName = typeof(T).Name;
         }
 
-        public void SetBasicAuthCredentials(string username, string password) {
-            ApplicationCredentials.username = username;
-            ApplicationCredentials.password = password;
+        public string composeUrl(string baseUrl) {
+            return composeUrl(baseUrl, null);
         }
 
-        public string composeUrl(string baseUrl, string httpVerb, bool isFromMockJson = true) {
-            return composeUrl(baseUrl, null, httpVerb, isFromMockJson);
-        }
-
-        protected string composeUrl(string baseUrl, string id, string httpVerb, bool isFromMockJson = true) {
-            bool isFromMockServer = baseUrl.StartsWith("http://localhost");
+        protected string composeUrl(string baseUrl, string id) {
             string candidateUrl = baseUrl;
             if (id != null) {
                 candidateUrl += "/" + id;
             }
-            string extension = (isFromMockServer ? "." + httpVerb.ToLower() + (isFromMockJson ? ".json" : ".txt") : "");
+            string extension = (fromS3 ? ".json" : "");
             return candidateUrl + extension;
         }
 
@@ -76,21 +74,14 @@ namespace Tradelite.SDK.DAO {
             request.SetRequestHeader("UserAgent", "Unity3D/C#/Tradelite/SDK");
             request.SetRequestHeader("Accept", acceptText ? "text/plain" : "application/json; charset=UTF-8");
             request.SetRequestHeader("Content-Type", "application/json; charset=UTF-8"); // Harmless if not required
-            if (authToken != null) {
-                request.SetRequestHeader("Authorization", "Bearer " + authToken);
+            if (!fromS3 && jwtToken != null) {
+                request.SetRequestHeader("Authorization", "Bearer " + jwtToken);
             }
             return request;
         }
 
-        protected UnityWebRequest signRequest(UnityWebRequest request) {
-            string credSequence = ApplicationCredentials.username + ":" + ApplicationCredentials.password;
-            string appToken = Convert.ToBase64String(encoder.GetBytes(credSequence));
-            request.SetRequestHeader("Authorization", "Basic " + appToken);
-            return request;
-        }
-
         public virtual async Task<T> Get(string id, Hashtable parameters = null) {
-            string url = appendParameters(composeUrl(baseUrl, id, "get"), parameters);
+            string url = appendParameters(composeUrl(baseUrl, id), parameters);
 
             try {
                 using var request = setRequestHeaders(UnityWebRequest.Get(url));
@@ -102,7 +93,7 @@ namespace Tradelite.SDK.DAO {
                 }
 
                 if (request.result != UnityWebRequest.Result.Success) {
-                    Debug.LogError($"Failed: {request.error}");
+                    Debug.LogError($"HttpDao.Get() failed:\n- {request.error}\n- {request.downloadHandler.text}");
                 }
                 else if (request.responseCode == 200) // OK
                 {
@@ -119,7 +110,7 @@ namespace Tradelite.SDK.DAO {
         }
 
         public virtual async Task<T[]> Select(Hashtable parameters = null) {
-            string url = appendParameters(composeUrl(baseUrl, "get"), parameters);
+            string url = appendParameters(composeUrl(baseUrl), parameters);
 
             try {
                 using var request = setRequestHeaders(UnityWebRequest.Get(url));
@@ -131,7 +122,7 @@ namespace Tradelite.SDK.DAO {
                 }
 
                 if (request.result != UnityWebRequest.Result.Success) {
-                    Debug.LogError($"Failed: {request.error}");
+                    Debug.LogError($"HttpDao.Select() failed:\n- {request.error}\n- {request.downloadHandler.text}");
                 }
                 else if (request.responseCode == 200) // OK
                 {
@@ -152,7 +143,7 @@ namespace Tradelite.SDK.DAO {
         }
 
         public virtual async Task<string> Create(T entity) {
-            string url = composeUrl(baseUrl, "post", false);
+            string url = composeUrl(baseUrl);
 
             try {
                 string payload = JsonUtility.ToJson(entity);
@@ -175,7 +166,7 @@ namespace Tradelite.SDK.DAO {
                 }
 
                 if (request.result != UnityWebRequest.Result.Success) {
-                    Debug.LogError($"Failed: {request.error}");
+                    Debug.LogError($"HttpDao.Create() failed:\n- {request.error}\n- {request.downloadHandler.text}");
                 }
                 else if (request.responseCode == 201) // OK
                 {

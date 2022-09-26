@@ -4,18 +4,14 @@ using System.Threading.Tasks;
 
 using Tradelite.SDK.DAO;
 using Tradelite.SDK.Model;
-using Tradelite.SDK.Model.ConfigScope;
 using Tradelite.SDK.Service;
 
 namespace Tradelite.SDK.Service {
     public class BaseService<T> where T : BaseModel {
-        protected GameConfiguration gameConfig;
         protected AbstractDao<T> dao;
         protected string entityName;
-        protected string token;
 
-        protected BaseService(string baseUrl, GameConfiguration gameConfig = null, string token = null) {
-            dao = new HttpDao<T>(baseUrl, token);
+        protected BaseService() {
             entityName = typeof(T).Name;
         }
 

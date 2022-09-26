@@ -13,8 +13,5 @@ namespace Tradelite.SDK.DAO {
         Task<string> Create(T entity);
         Task<string> Update(string id, T partialEntity);
         Task Delete(string id);
-
-        // static void setBasicAuthCredentials(string username, string password) => throw new NotImplementedException();
-        void SetBasicAuthCredentials(string username, string password);
     }
 }
