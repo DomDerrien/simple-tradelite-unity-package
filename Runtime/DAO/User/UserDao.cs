@@ -14,8 +14,8 @@ namespace Tradelite.SDK.DAO.UserScope {
     public class UserDao : HttpDao<User> {
         public UserDao() : base(DataSource.User) { }
 
-        public override Task<User> Get(string id, Hashtable parameters = null) {
-            throw new InvalidOperationException("Unsupported operation");
+        public override Task<User> Select(Hashtable parameters = null) {
+            throw new InvalidOperationException("User.Select() not supported");
         }
     }
 }

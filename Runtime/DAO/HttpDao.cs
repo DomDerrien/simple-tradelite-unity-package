@@ -93,7 +93,7 @@ namespace Tradelite.SDK.DAO {
                 }
 
                 if (request.result != UnityWebRequest.Result.Success) {
-                    Debug.LogError($"Failed: {request.error}");
+                    Debug.LogError($"HttpDao.Get() failed:\n- {request.error}\n- {request.downloadHandler.text}");
                 }
                 else if (request.responseCode == 200) // OK
                 {
@@ -122,7 +122,7 @@ namespace Tradelite.SDK.DAO {
                 }
 
                 if (request.result != UnityWebRequest.Result.Success) {
-                    Debug.LogError($"Failed: {request.error}");
+                    Debug.LogError($"HttpDao.Select() failed:\n- {request.error}\n- {request.downloadHandler.text}");
                 }
                 else if (request.responseCode == 200) // OK
                 {
@@ -166,7 +166,7 @@ namespace Tradelite.SDK.DAO {
                 }
 
                 if (request.result != UnityWebRequest.Result.Success) {
-                    Debug.LogError($"Failed: {request.error}");
+                    Debug.LogError($"HttpDao.Create() failed:\n- {request.error}\n- {request.downloadHandler.text}");
                 }
                 else if (request.responseCode == 201) // OK
                 {
