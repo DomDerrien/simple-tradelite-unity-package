@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 using Tradelite.SDK.Model;
 
-namespace Tradelite.SDK.Model.UserScope
+namespace Tradelite.SDK.Model.KbScope
 {
     [Serializable]
-    public class User : BaseModel
+    public class CategoryCatalog : BaseModel
     {
-        public string email = null;
-        public string nickname = null;
+        public string title = null;
+        public string[] categoryIds;
 
         public override string ToString()
         {
@@ -17,8 +17,8 @@ namespace Tradelite.SDK.Model.UserScope
             string baseToString = base.ToString();
             if (!string.IsNullOrEmpty(baseToString)) output.Add(baseToString);
 
-            if (!string.IsNullOrEmpty(email)) output.Add($"email: `{email}`");
-            if (!string.IsNullOrEmpty(nickname)) output.Add($"nickname: `{nickname}`");
+            if (!string.IsNullOrEmpty(title)) output.Add($"title: `{title}`");
+            if (0 < categoryIds.Length) output.Add($"categoryIds: `{categoryIds}`");
 
             return String.Join(", ", output);
         }

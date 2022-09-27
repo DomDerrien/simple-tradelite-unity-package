@@ -13,8 +13,9 @@ namespace Tradelite.SDK
         public static readonly string Wallet = apiUrl + "/v1/user/wallet";
         // Mogaland knowledge base
         public static readonly string Instrument = cdnUrl + "/data/instrument";
-        public static readonly string QuizQuestion = apiUrl + "/v1/kb/question";
-        public static readonly string QuizAnswer = apiUrl + "/v1/kb/answer";
-        public static readonly string QuizSolution = apiUrl + "/v1/kb/solution";
+        public static readonly string KbCategory = cdnUrl + "/data/kb/category";
+        public static readonly string KbQuestion = apiUrl + "/v1/kb/question";
+        public static readonly string KbAnswer = apiUrl + "/v1/kb/answer";
+        public static readonly string KbSolution = apiUrl + "/v1/kb/solution";
     }
 }

@@ -6,10 +6,14 @@ using Tradelite.SDK.Model;
 namespace Tradelite.SDK.Model.UserScope
 {
     [Serializable]
-    public class User : BaseModel
+    public class Session : BaseModel
     {
-        public string email = null;
-        public string nickname = null;
+        public string locale = "en";
+
+        public void SetLocale(string locale = "en")
+        {
+            this.locale = locale;
+        }
 
         public override string ToString()
         {
@@ -17,8 +21,7 @@ namespace Tradelite.SDK.Model.UserScope
             string baseToString = base.ToString();
             if (!string.IsNullOrEmpty(baseToString)) output.Add(baseToString);
 
-            if (!string.IsNullOrEmpty(email)) output.Add($"email: `{email}`");
-            if (!string.IsNullOrEmpty(nickname)) output.Add($"nickname: `{nickname}`");
+            if (!string.IsNullOrEmpty(locale)) output.Add($"locale: `{locale}`");
 
             return String.Join(", ", output);
         }
