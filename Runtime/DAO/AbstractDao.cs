@@ -4,9 +4,10 @@ using System.Threading.Tasks;
 
 using Tradelite.SDK.Model;
 
-namespace Tradelite.SDK.DAO {
-
-    public interface AbstractDao<T> where T : BaseModel {
+namespace Tradelite.SDK.DAO
+{
+    public interface AbstractDao<T> where T : BaseModel
+    {
 
         Task<T> Get(string id, Hashtable parameters = null);
         Task<T[]> Select(Hashtable parameters = null);
